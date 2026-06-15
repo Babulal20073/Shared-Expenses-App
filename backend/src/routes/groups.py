@@ -136,6 +136,14 @@ async def remove_member(
     return {"message": "Member removed successfully"}
 
 
+from models.models import GroupMember, User
+from pydantic import BaseModel
+from datetime import datetime
+
+class MemberTimelineUpdate(BaseModel):
+    joined_at: datetime
+    left_at: Optional[datetime] = None
+
 @router.get("/{group_id}/members", response_model=List[UserResponse])
 async def get_members(
     group_id: str,
@@ -150,3 +158,69 @@ async def get_members(
     
     members = GroupService.get_group_members(group_id, db)
     return [UserResponse.model_validate(m) for m in members]
+
+
+@router.get("/{group_id}/members-detailed")
+async def get_members_detailed(
+    group_id: str,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Get all group members with detailed timeline information"""
+    group = db.query(Group).filter(Group.id == group_id).first()
+    if not group:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Group not found")
+        
+    members_data = db.query(
+        User.id, User.username, User.email, User.full_name,
+        GroupMember.joined_at, GroupMember.left_at, GroupMember.is_active
+    ).join(
+        GroupMember, User.id == GroupMember.user_id
+    ).filter(
+        GroupMember.group_id == group_id
+    ).all()
+    
+    return [
+        {
+            "user_id": m[0],
+            "username": m[1],
+            "email": m[2],
+            "full_name": m[3],
+            "joined_at": m[4].isoformat() if m[4] else None,
+            "left_at": m[5].isoformat() if m[5] else None,
+            "is_active": m[6]
+        }
+        for m in members_data
+    ]
+
+
+@router.put("/{group_id}/members/{user_id}/timeline")
+async def update_member_timeline(
+    group_id: str,
+    user_id: str,
+    timeline_data: MemberTimelineUpdate,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Update a member's active join/leave timeline"""
+    group = db.query(Group).filter(Group.id == group_id).first()
+    if not group:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Group not found")
+        
+    if group.created_by != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Only group creator can edit timeline")
+        
+    member = db.query(GroupMember).filter(
+        GroupMember.group_id == group_id,
+        GroupMember.user_id == user_id
+    ).first()
+    
+    if not member:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Member not found in group")
+        
+    member.joined_at = timeline_data.joined_at
+    member.left_at = timeline_data.left_at
+    
+    db.commit()
+    return {"message": "Timeline updated successfully"}
+
