@@ -4,7 +4,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 from database import get_db
 from schemas import GroupCreate, GroupUpdate, GroupResponse, UserResponse
 from services.auth_service import GroupService, AuthService
