@@ -1,0 +1,140 @@
+.group-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.group-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-header h1 {
+  margin: 0;
+}
+
+.group-header button {
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.group-content {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+section {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.balances-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.balances-table th {
+  background-color: #f8f9fa;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid #ddd;
+}
+
+.balances-table td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.balances-table .owes {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.balances-table .owed {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.settlements-section ul {
+  list-style: none;
+}
+
+.settlements-section li {
+  padding: 10px;
+  background-color: #f8f9fa;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  border-left: 4px solid #667eea;
+}
+
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.expense-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 4px solid #667eea;
+}
+
+.expense-item h4 {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.expense-item .date {
+  margin: 0;
+  color: #999;
+  font-size: 12px;
+}
+
+.expense-item .amount {
+  font-weight: 600;
+  font-size: 18px;
+  color: #667eea;
+}
+
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: #667eea;
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: transform 0.3s;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+}

@@ -1,0 +1,10 @@
+import json
+import re
+
+# For vite config
+export default {
+  test: {
+    globals: true,
+    environment: 'jsdom'
+  }
+}
